@@ -15,3 +15,16 @@ This Flutter application demonstrates:
    ```bash
    git clone https://github.com/krian-kk/maps
    cd maps
+
+2. **Run the project**:
+   ```bash
+   flutter pub get
+   flutter run
+
+3. **Run API test cases**:
+   ```bash
+   flutter test test/product_repository_test.dart
+
+4. **Run Distance unit test cases**:
+   ```bash
+   flutter test test/distance_test.dart
