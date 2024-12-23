@@ -51,7 +51,8 @@ class _ProductMapState extends State<ProductMap> {
               context: context,
               builder: (context) => Container(
                 width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.all(16),
+                height: 350,
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
