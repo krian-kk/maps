@@ -1,10 +1,10 @@
 # Flutter Product Listing & Mapping App
 
 This Flutter application demonstrates:
-- Listing products fetched from a remote API.
+- Listing products fetched from a remote API with Pull to refresh.
 - Displaying product locations on Google Maps with markers.
 - Calculating and displaying the distance between the user and each product.
-- Navigating between screens with smooth animations.
+- Navigating between screens with smooth animations and product details when tapping on markers.
 - State management using BLoC.
 - Unit test cases for apis.
 - Location Permission & error handling.
