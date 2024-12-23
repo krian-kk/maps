@@ -1,15 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps/features/product/bloc/product_bloc.dart';
 import 'package:maps/features/product/bloc/product_event.dart';
 import 'package:maps/features/product/bloc/product_state.dart';
 import 'package:maps/features/product/domain/entities/product.dart';
-import 'package:maps/features/product/presentation/product_map.dart';
-import 'package:maps/features/product/presentation/view_direction.dart';
+import 'package:maps/features/product/presentation/product_card.dart';
+import 'package:maps/features/map/presentation/product_map.dart';
+import 'package:maps/features/direction/presentation/view_direction.dart';
+import 'package:maps/utils/location_service.dart';
 
-class ProductListScreen extends StatelessWidget {
+class ProductListScreen extends StatefulWidget {
   const ProductListScreen({super.key});
+
+  @override
+  State<ProductListScreen> createState() => _ProductListScreenState();
+}
+
+class _ProductListScreenState extends State<ProductListScreen> {
+  Position? sourceLocation;
+
+  Future<void> _checkLocationPermission() async {
+    try {
+      sourceLocation = await LocationService.getCurrentLocation();
+      BlocProvider.of<ProductBloc>(context).add(LoadProductsEvent());
+    } catch (e) {
+      _showErrorDialog(context, e.toString());
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLocationPermission();
+  }
+
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Location Error"),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _checkLocationPermission();
+            },
+            child: const Text("Retry"),
+          ),
+          TextButton(
+            onPressed: () {
+              // Navigator.of(context).pop();
+              Geolocator.openAppSettings();
+            },
+            child: const Text("Settings"),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,22 +70,25 @@ class ProductListScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
-            child: Icon(Icons.map),
+            child: const Icon(Icons.map),
             onPressed: () {
               Navigator.push(
                 context,
                 PageRouteBuilder(
                   pageBuilder: (context, animation, secondaryAnimation) =>
-                      ProductMapScreen(),
-                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      const ProductMapScreen(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
                     const begin = Offset(1.0, 0.0);
                     const end = Offset.zero;
                     const curve = Curves.easeInOut;
 
-                    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                    var tween = Tween(begin: begin, end: end)
+                        .chain(CurveTween(curve: curve));
                     var offsetAnimation = animation.drive(tween);
 
-                    return SlideTransition(position: offsetAnimation, child: child);
+                    return SlideTransition(
+                        position: offsetAnimation, child: child);
                   },
                 ),
               );
@@ -45,7 +99,7 @@ class ProductListScreen extends StatelessWidget {
       body: BlocBuilder<ProductBloc, ProductState>(
         builder: (context, state) {
           if (state is ProductLoading) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (state is ProductLoaded) {
             return RefreshIndicator(
               onRefresh: () async {
@@ -55,7 +109,26 @@ class ProductListScreen extends StatelessWidget {
                 itemCount: state.products.length,
                 itemBuilder: (context, index) {
                   final product = state.products[index];
-                  return ProductCard(product: product);
+                  return ProductCard(
+                    product: product,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ViewDirectionsScreen(
+                            source: LatLng(
+                              sourceLocation?.latitude ?? 0.00,
+                              sourceLocation?.longitude ?? 0.00,
+                            ),
+                            destination: LatLng(
+                              product.coordinates.first,
+                              product.coordinates.last,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
                 },
               ),
             );
@@ -69,7 +142,7 @@ class ProductListScreen extends StatelessWidget {
                     onPressed: () {
                       context.read<ProductBloc>().add(LoadProductsEvent());
                     },
-                    child: Text("Retry"),
+                    child: const Text("Retry"),
                   ),
                 ],
               ),
@@ -77,100 +150,6 @@ class ProductListScreen extends StatelessWidget {
           }
           return Container();
         },
-      ),
-    );
-  }
-}
-
-class ProductCard extends StatelessWidget {
-  final Product product;
-
-  const ProductCard({Key? key, required this.product}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Product Image
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: Image.network(
-                product.imageUrl ?? '',
-                height: 150,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  color: Colors.grey,
-                  height: 150,
-                  width: double.infinity,
-                  child: Icon(Icons.broken_image, size: 50),
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-
-            // Product Title
-            Text(
-              product.title ?? '',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 4),
-
-            // Product Description
-            Text(
-              product.title ?? '',
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-              ),
-            ),
-            const SizedBox(height: 8),
-
-            // Distance Information
-            if (product.coordinates != null)
-              Text(
-                "Distance: ${product.distance?.toStringAsFixed(2)} km",
-                style: const TextStyle(fontSize: 14),
-              ),
-
-            const SizedBox(height: 8),
-
-            // View Directions Button
-            Align(
-              alignment: Alignment.centerRight,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => ViewDirectionsScreen(
-                        source: LatLng(
-                          37.7749, // Replace with actual user latitude
-                          -122.4194, // Replace with actual user longitude
-                        ),
-                        destination: LatLng(
-                          product.coordinates.first,
-                          product.coordinates.last,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                child: const Text("View Directions"),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

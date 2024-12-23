@@ -21,4 +21,15 @@ class LocationService {
 
     return await Geolocator.getCurrentPosition();
   }
+
+  static double getDistanceBetweenTwoCoordinatesInKm(
+      startLat, startLong, endLat, endLong) {
+    return Geolocator.distanceBetween(
+          startLat,
+          startLong,
+          endLat,
+          endLong,
+        ) /
+        1000;
+  }
 }

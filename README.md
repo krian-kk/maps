@@ -52,5 +52,5 @@ This Flutter application demonstrates:
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-repository/flutter-product-app.git
-   cd flutter-product-app
+   git clone https://github.com/krian-kk/maps
+   cd maps

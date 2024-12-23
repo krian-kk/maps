@@ -11,7 +11,7 @@ class AnimatedMarker extends StatelessWidget {
   Widget build(BuildContext context) {
     return TweenAnimationBuilder(
       tween: Tween<double>(begin: 0, end: 1),
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
       builder: (context, value, child) {
         return Transform.scale(
           scale: value,
@@ -26,8 +26,7 @@ class AnimatedMarker extends StatelessWidget {
 class GoogleMapMarkerWidget extends StatelessWidget {
   final Marker marker;
 
-  const GoogleMapMarkerWidget({Key? key, required this.marker})
-      : super(key: key);
+  const GoogleMapMarkerWidget({super.key, required this.marker});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +34,7 @@ class GoogleMapMarkerWidget extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Icon(
+          const Icon(
             Icons.location_on,
             size: 40,
             color: Colors.red, // Base marker color

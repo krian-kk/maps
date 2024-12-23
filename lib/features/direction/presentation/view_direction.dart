@@ -6,6 +6,7 @@ class ViewDirectionsScreen extends StatelessWidget {
   final LatLng destination;
 
   const ViewDirectionsScreen({
+    super.key,
     required this.source,
     required this.destination,
   });
@@ -17,7 +18,7 @@ class ViewDirectionsScreen extends StatelessWidget {
       body: GoogleMap(
         initialCameraPosition: CameraPosition(
           target: source,
-          zoom: 14,
+          zoom: 1,
         ),
         markers: {
           Marker(markerId: MarkerId('source'), position: source),
