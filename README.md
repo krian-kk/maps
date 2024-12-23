@@ -38,3 +38,4 @@ For this project we are using feature first project structure. Click [here](http
 
 ### State Management:
 This project is using BLOC state management framework to manages events and states in the app. Click [here](https://bloclibrary.dev/) for more details regarding bloc.
+
