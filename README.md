@@ -28,3 +28,13 @@ This Flutter application demonstrates:
 4. **Run Distance unit test cases**:
    ```bash
    flutter test test/distance_test.dart
+
+### Architecture & Project Structure:
+In this project we are using clean architecture principles to structure the code and separating the app into distinct layers: Presentation, Domain, and Data.
+
+For this project we are using feature first project structure. Click [here](https://codewithandrea.com/articles/flutter-project-structure/) for more details.
+
+![](/screenshots/scr_project_structure.png)
+
+### State Management:
+This project is using BLOC state management framework to manages events and states in the app. Click [here](https://bloclibrary.dev/) for more details regarding bloc.
