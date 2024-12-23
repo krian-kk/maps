@@ -6,6 +6,8 @@ This Flutter application demonstrates:
 - Calculating and displaying the distance between the user and each product.
 - Navigating between screens with smooth animations.
 - State management using BLoC.
+- Unit test cases for apis.
+- Location Permission & error handling.
 
 ---
 
@@ -38,4 +40,9 @@ For this project we are using feature first project structure. Click [here](http
 
 ### State Management:
 This project is using BLOC state management framework to manages events and states in the app. Click [here](https://bloclibrary.dev/) for more details regarding bloc.
+
+### iOS ScreenShots:
+
+![](/screenshots/scr_ios1.png)
+![](/screenshots/scr_ios2.png)
 
