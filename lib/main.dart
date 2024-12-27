@@ -4,6 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:maps/features/product/bloc/product_bloc.dart';
 import 'package:maps/features/product/presentation/product_listing.dart';
 import 'package:maps/features/product/repository/product_repository.dart';
+import 'package:maps/features/user/bloc/user_bloc.dart';
+import 'package:maps/features/user/presentation/user_list.dart';
+import 'package:maps/features/user/repository/user_repository.dart';
 
 Future<void> main() async {
   runApp(const MyApp());
@@ -15,6 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productRepository = ProductRepository(dio: Dio());
+    final userRepository = UserRepository(dio: Dio());
 
     return MaterialApp(
       theme: ThemeData(
@@ -22,11 +26,11 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: RepositoryProvider(
-        create: (BuildContext context) => productRepository,
+        create: (BuildContext context) => userRepository,
         child: MultiBlocProvider(
           providers: [
-            BlocProvider<ProductBloc>(
-              create: (context) => ProductBloc(productRepository),
+            BlocProvider<UserBloc>(
+              create: (context) => UserBloc(userRepository: userRepository),
             ),
           ],
           child: MaterialApp(
@@ -35,7 +39,7 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.blue,
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
-            home: const ProductListScreen(),
+            home: const UserList(),
             debugShowCheckedModeBanner: false,
           ),
         ),
