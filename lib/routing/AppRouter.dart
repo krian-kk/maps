@@ -17,9 +17,6 @@ class AppRouter {
         routes: <GoRoute>[
           GoRoute(
             path: '/',
-            // pageBuilder: (context, state){
-            //
-            // },
             builder: (context, state) {
               final productRepository =
                   ProductRepositoryImpl(dio: DioClient(''));
@@ -39,13 +36,26 @@ class AppRouter {
           GoRoute(
             path: '/maps',
             name: "maps",
-            // pageBuilder: (context,state){
-            //
-            // },
-            builder: (context, state) {
-              return BlocProvider.value(
-                value: state.extra! as ProductBloc,
-                child: const ProductMapScreen(),
+            pageBuilder: (context, state) {
+              return CustomTransitionPage(
+                key: state.pageKey,
+                child: BlocProvider.value(
+                  value: state.extra! as ProductBloc,
+                  child: const ProductMapScreen(),
+                ),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  const begin = Offset(1.0, 0.0);
+                  const end = Offset.zero;
+                  const curve = Curves.easeInOut;
+
+                  var tween = Tween(begin: begin, end: end)
+                      .chain(CurveTween(curve: curve));
+                  var offsetAnimation = animation.drive(tween);
+
+                  return SlideTransition(
+                      position: offsetAnimation, child: child);
+                },
               );
             },
           ),
