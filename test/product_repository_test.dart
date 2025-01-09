@@ -1,19 +1,20 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:maps/features/product/repository/product_repository.dart';
+import 'package:maps/network/dio_client.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:dio/dio.dart';
 
 import 'product_repository_test.mocks.dart';
 
-@GenerateMocks([Dio])
+@GenerateMocks([DioClient])
 void main() {
   late ProductRepository repository;
-  late MockDio mockDio;
+  late MockDioClient mockDio;
 
   setUp(() {
-    mockDio = MockDio();
-    repository = ProductRepository(dio: mockDio);
+    mockDio = MockDioClient();
+    repository = ProductRepositoryImpl(dio: mockDio);
   });
 
   test("Fetch products successfully", () async {

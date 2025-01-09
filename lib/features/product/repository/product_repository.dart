@@ -1,11 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:maps/features/product/domain/entities/product.dart';
+import 'package:maps/network/dio_client.dart';
 
-class ProductRepository {
-  Dio dio;
+abstract class ProductRepository {
+  Future<List<Product>> fetchProducts();
+}
 
-  ProductRepository({required this.dio});
+class ProductRepositoryImpl implements ProductRepository {
+  DioClient dio;
 
+  ProductRepositoryImpl({required this.dio});
+
+  @override
   Future<List<Product>> fetchProducts() async {
     final response = await dio.get(
       'https://prcddzpsk5p33eazh5ykzbj4ra0xwyhk.lambda-url.eu-west-2.on.aws/',

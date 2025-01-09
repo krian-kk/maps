@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps/features/product/bloc/product_bloc.dart';
 import 'package:maps/features/product/bloc/product_event.dart';
 import 'package:maps/features/product/bloc/product_state.dart';
-import 'package:maps/features/product/domain/entities/product.dart';
 import 'package:maps/features/product/presentation/product_card.dart';
-import 'package:maps/features/map/presentation/product_map.dart';
 import 'package:maps/features/direction/presentation/view_direction.dart';
 import 'package:maps/utils/location_service.dart';
 
@@ -72,26 +71,27 @@ class _ProductListScreenState extends State<ProductListScreen> {
           FloatingActionButton(
             child: const Icon(Icons.map),
             onPressed: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      const ProductMapScreen(),
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    const begin = Offset(1.0, 0.0);
-                    const end = Offset.zero;
-                    const curve = Curves.easeInOut;
-
-                    var tween = Tween(begin: begin, end: end)
-                        .chain(CurveTween(curve: curve));
-                    var offsetAnimation = animation.drive(tween);
-
-                    return SlideTransition(
-                        position: offsetAnimation, child: child);
-                  },
-                ),
-              );
+              context.push("/maps",extra: context.read<ProductBloc>());
+              // Navigator.push(
+              //   context,
+              //   PageRouteBuilder(
+              //     pageBuilder: (context, animation, secondaryAnimation) =>
+              //         const ProductMapScreen(),
+              //     transitionsBuilder:
+              //         (context, animation, secondaryAnimation, child) {
+              //       const begin = Offset(1.0, 0.0);
+              //       const end = Offset.zero;
+              //       const curve = Curves.easeInOut;
+              //
+              //       var tween = Tween(begin: begin, end: end)
+              //           .chain(CurveTween(curve: curve));
+              //       var offsetAnimation = animation.drive(tween);
+              //
+              //       return SlideTransition(
+              //           position: offsetAnimation, child: child);
+              //     },
+              //   ),
+              // );
             },
           ),
         ],
