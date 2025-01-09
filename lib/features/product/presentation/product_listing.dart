@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps/features/product/bloc/product_bloc.dart';
 import 'package:maps/features/product/bloc/product_event.dart';
 import 'package:maps/features/product/bloc/product_state.dart';
 import 'package:maps/features/product/presentation/product_card.dart';
-import 'package:maps/features/direction/presentation/view_direction.dart';
 import 'package:maps/utils/location_service.dart';
 
 class ProductListScreen extends StatefulWidget {
@@ -98,21 +96,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         "end_lat": product.coordinates.first,
                         "end_long": product.coordinates.last
                       });
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ViewDirectionsScreen(
-                            source: LatLng(
-                              sourceLocation?.latitude ?? 0.00,
-                              sourceLocation?.longitude ?? 0.00,
-                            ),
-                            destination: LatLng(
-                              product.coordinates.first,
-                              product.coordinates.last,
-                            ),
-                          ),
-                        ),
-                      );
                     },
                   );
                 },
