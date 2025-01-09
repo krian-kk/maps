@@ -14,15 +14,15 @@ class ViewDirectionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("View Directions")),
+      appBar: AppBar(title: const Text("View Directions")),
       body: GoogleMap(
         initialCameraPosition: CameraPosition(
           target: source,
           zoom: 1,
         ),
         markers: {
-          Marker(markerId: MarkerId('source'), position: source),
-          Marker(markerId: MarkerId('destination'), position: destination),
+          Marker(markerId: const MarkerId('source'), position: source),
+          Marker(markerId: const MarkerId('destination'), position: destination),
         },
         polylines: {
           Polyline(
